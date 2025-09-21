@@ -5,7 +5,7 @@ import { DemoAttendanceRecord } from '@/lib/demo-data';
 import { GAMES } from '@/lib/game-config';
 
 interface AttendanceLineChartProps {
-  data: Array<{ time: string; [grade: string]: number }>;
+  data: Array<{ time: string; Senior: number; Junior: number; Sophomore: number; Freshman: number }>;
 }
 
 const COLORS = {

@@ -2,20 +2,16 @@
 
 import { useState, useEffect } from 'react'
 import SuccessClient from './success-client'
+import { GAMES } from '@/lib/game-config'
 
-type Props = { showHeader?: boolean }
-
-// --- Fixed demo game, constants, and helpers (CT accurate) ---
-const game = {
-  id: 'week-3-vs-stmarks',
-  name: 'Week 3 vs. St. Marks School of Dallas',
-  start: new Date('2025-09-21T14:00:00-05:00'), // 2:00 PM CT
-  end: new Date('2025-09-21T17:00:00-05:00'),   // 5:00 PM CT
+type Props = {
+  game: typeof GAMES[number];
+  session: any; // Using 'any' for now is fine for the demo session object
+  checkInResult: any; // Using 'any' is fine for the demo result object
+  showHeader?: boolean;
 }
 
-// Check-in window = 1h before start -> 1h after end
-const checkInStart = new Date(game.start.getTime() - 60 * 60 * 1000) // 1:00 PM CT
-const checkInEnd = new Date(game.end.getTime() + 60 * 60 * 1000)     // 6:00 PM CT
+// --- Demo game, constants, and helpers (CT accurate) ---
 
 const ESD_LOGO = 'https://bvmsports.com/wp-content/uploads/2021/12/20181010230955_782_mascotOrig-150x150.png'
 const OPPONENT_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/2/2d/StMarksTexas.jpg'
@@ -67,21 +63,24 @@ function toHMS(ms: number) {
   return `${pad(h)}:${pad(m)}:${pad(s)}`
 }
 
-function StatusTimer() {
+function StatusTimer({ game }: { game: typeof GAMES[number] }) {
   const now = useNow(1000)
-  if (now < checkInStart) {
+  const gameStart = new Date(game.checkInStart)
+  const gameEnd = new Date(game.checkInEnd)
+
+  if (now < gameStart) {
     return (
       <div className="text-center">
         <div className="text-sm font-semibold text-amber-700 mb-1">Check-in opens in</div>
-        <div className="text-4xl font-mono font-extrabold text-amber-600">{toHMS(checkInStart.getTime() - now.getTime())}</div>
+        <div className="text-4xl font-mono font-extrabold text-amber-600">{toHMS(gameStart.getTime() - now.getTime())}</div>
       </div>
     )
   }
-  if (now >= checkInStart && now <= checkInEnd) {
+  if (now >= gameStart && now <= gameEnd) {
     return (
       <div className="text-center">
         <div className="text-sm font-semibold text-emerald-700 mb-1">Check-in closes in</div>
-        <div className="text-4xl font-mono font-extrabold text-emerald-600">{toHMS(checkInEnd.getTime() - now.getTime())}</div>
+        <div className="text-4xl font-mono font-extrabold text-emerald-600">{toHMS(gameEnd.getTime() - now.getTime())}</div>
       </div>
     )
   }
@@ -98,7 +97,7 @@ interface DemoResult {
   message?: string
 }
 
-export default function CheckInClient({ showHeader = true }: Props) {
+export default function CheckInClient({ game, session, checkInResult, showHeader = true }: Props) {
   const [demoResult, setDemoResult] = useState<DemoResult>({ status: 'idle' })
 
   // Client-side router: render success screen as full-page replacement
@@ -119,9 +118,9 @@ export default function CheckInClient({ showHeader = true }: Props) {
               <img src={OPPONENT_LOGO} alt="St. Marks" className="h-16 w-16 object-contain" />
             </div>
             <h1 className="mt-3 text-xl font-bold text-gray-900">{game.name}</h1>
-            <p className="mt-1 text-sm text-gray-600">{formatFullWindow(game.start, game.end)}</p>
-            <div className="mt-2"><StatusTimer /></div>
-            <p className="mt-1 text-[11px] text-gray-500">Check-in window: {formatCheckInWindow(checkInStart, checkInEnd)}</p>
+            <p className="mt-1 text-sm text-gray-600">{formatFullWindow(new Date(game.checkInStart), new Date(game.checkInEnd))}</p>
+            <div className="mt-2"><StatusTimer game={game} /></div>
+            <p className="mt-1 text-[11px] text-gray-500">Check-in window: {formatCheckInWindow(new Date(game.checkInStart), new Date(game.checkInEnd))}</p>
           </div>
         </header>
       )}

@@ -83,7 +83,7 @@ export function processTimeSeriesData(
   startTime: Date,
   endTime: Date,
   intervalMinutes: number = 15
-): Array<{ time: string; [grade: string]: number }> {
+): Array<{ time: string; Senior: number; Junior: number; Sophomore: number; Freshman: number }> {
   // Initialize time intervals
   const intervals: Date[] = [];
   let currentTime = new Date(startTime);
@@ -114,7 +114,10 @@ export function processTimeSeriesData(
     if (intervalIndex >= 0) {
       // Add to all intervals from this point forward (cumulative)
       for (let i = intervalIndex; i < result.length; i++) {
-        result[i][record.grade]++;
+        if (record.grade === 'Senior') result[i].Senior++;
+        else if (record.grade === 'Junior') result[i].Junior++;
+        else if (record.grade === 'Sophomore') result[i].Sophomore++;
+        else if (record.grade === 'Freshman') result[i].Freshman++;
       }
     }
   });

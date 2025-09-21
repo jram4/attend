@@ -1,13 +1,10 @@
-import { createClient } from '@/lib/supabase/middleware'
-import { NextResponse, type NextRequest } from 'next/server'
+import { type NextRequest } from 'next/server'
+import { updateSession } from '@/lib/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
-  const { supabase, response } = createClient(request)
-
-  // Refresh the session token if one exists
-  await supabase.auth.getUser()
-
-  return response
+  // updateSession will take care of refreshing the session and
+  // modifying the request and response headers.
+  return await updateSession(request)
 }
 
 export const config = {

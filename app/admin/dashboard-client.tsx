@@ -12,7 +12,7 @@ interface AdminDashboardClientProps {
 }
 
 export function AdminDashboardClient({ adminLogout }: AdminDashboardClientProps) {
-  const [selectedGameId, setSelectedGameId] = useState(GAMES[0].id);
+  const [selectedGameId, setSelectedGameId] = useState<string>(GAMES[0].id);
   const [attendanceData, setAttendanceData] = useState<DemoAttendanceRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
