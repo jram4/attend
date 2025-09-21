@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import SuccessClient from './success-client'
 
 type Props = { showHeader?: boolean }
 
@@ -100,6 +101,12 @@ interface DemoResult {
 export default function CheckInClient({ showHeader = true }: Props) {
   const [demoResult, setDemoResult] = useState<DemoResult>({ status: 'idle' })
 
+  // Client-side router: render success screen as full-page replacement
+  if (demoResult.status === 'success') {
+    return <SuccessClient onDone={() => setDemoResult({ status: 'idle' })} />
+  }
+
+  // Original check-in layout for all other states
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex flex-col">
       {/* Header (hide if parent already renders a title) */}
@@ -144,20 +151,6 @@ export default function CheckInClient({ showHeader = true }: Props) {
           <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-gray-200 bg-white/90 shadow-xl backdrop-blur flex flex-col items-center justify-center">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mb-6" />
             <p className="text-lg font-semibold text-gray-700">{demoResult.message}</p>
-          </div>
-        )}
-
-        {demoResult.status === 'success' && (
-          <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-emerald-200 bg-emerald-50/90 shadow-xl backdrop-blur flex flex-col items-center justify-center text-emerald-800 p-6 text-center">
-            <div className="text-7xl mb-4">✅</div>
-            <h2 className="text-2xl font-bold mb-2">{demoResult.message}</h2>
-            <p className="text-sm opacity-90 mb-6">Thank you for participating. Enjoy the game!</p>
-            <button
-              onClick={() => setDemoResult({ status: 'idle' })}
-              className="rounded-xl bg-gray-900 text-white px-5 py-3 text-sm font-semibold shadow-md active:scale-[.99] transition-transform"
-            >
-              Done
-            </button>
           </div>
         )}
 
