@@ -1,6 +1,7 @@
 'use client';
 
 import { Users, GraduationCap, BookOpen, School, UserCheck } from 'lucide-react';
+import { GRADE_SIZES } from '@/lib/grade-config';
 
 interface StatsCardsProps {
   gradeCounts: Record<string, number>;
@@ -8,11 +9,43 @@ interface StatsCardsProps {
 }
 
 export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
+  // Calculate total student body
+  const totalStudents = Object.values(GRADE_SIZES).reduce((sum, size) => sum + size, 0);
+  const totalPercentage = ((totalCount / totalStudents) * 100).toFixed(1);
+
   const gradeCards = [
-    { title: 'Senior', count: gradeCounts.Senior || 0, Icon: GraduationCap, iconColor: 'text-purple-700' },
-    { title: 'Junior', count: gradeCounts.Junior || 0, Icon: BookOpen, iconColor: 'text-emerald-700' },
-    { title: 'Sophomore', count: gradeCounts.Sophomore || 0, Icon: School, iconColor: 'text-amber-700' },
-    { title: 'Freshman', count: gradeCounts.Freshman || 0, Icon: UserCheck, iconColor: 'text-red-700' },
+    { 
+      title: 'Senior', 
+      count: gradeCounts.Senior || 0, 
+      total: GRADE_SIZES.Senior,
+      percentage: (((gradeCounts.Senior || 0) / GRADE_SIZES.Senior) * 100).toFixed(1),
+      Icon: GraduationCap, 
+      iconColor: 'text-purple-700' 
+    },
+    { 
+      title: 'Junior', 
+      count: gradeCounts.Junior || 0, 
+      total: GRADE_SIZES.Junior,
+      percentage: (((gradeCounts.Junior || 0) / GRADE_SIZES.Junior) * 100).toFixed(1),
+      Icon: BookOpen, 
+      iconColor: 'text-emerald-700' 
+    },
+    { 
+      title: 'Sophomore', 
+      count: gradeCounts.Sophomore || 0, 
+      total: GRADE_SIZES.Sophomore,
+      percentage: (((gradeCounts.Sophomore || 0) / GRADE_SIZES.Sophomore) * 100).toFixed(1),
+      Icon: School, 
+      iconColor: 'text-amber-700' 
+    },
+    { 
+      title: 'Freshman', 
+      count: gradeCounts.Freshman || 0, 
+      total: GRADE_SIZES.Freshman,
+      percentage: (((gradeCounts.Freshman || 0) / GRADE_SIZES.Freshman) * 100).toFixed(1),
+      Icon: UserCheck, 
+      iconColor: 'text-red-700' 
+    },
   ];
 
   return (
@@ -21,6 +54,9 @@ export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
       <div className="text-center mb-4">
         <p className="text-lg font-medium text-slate-700">
           Total Attendance: <span className="font-bold text-slate-900">{totalCount}</span>
+        </p>
+        <p className="text-sm text-slate-500">
+          {totalCount} out of {totalStudents} ({totalPercentage}%)
         </p>
       </div>
       
@@ -36,6 +72,9 @@ export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
               <card.Icon className={`h-6 w-6 ${card.iconColor}`} />
             </div>
             <p className="text-3xl font-bold text-slate-900">{card.count}</p>
+            <p className="text-sm text-slate-500">
+              out of {card.total} ({card.percentage}%)
+            </p>
           </div>
         ))}
       </div>

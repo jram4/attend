@@ -1,18 +1,11 @@
 import { GAMES } from './game-config';
+import { GRADE_SIZES } from './grade-config';
 
 // Type for a single attendance record
 export interface DemoAttendanceRecord {
   timestamp: Date;
   grade: string;
 }
-
-// Grade distribution weights (must sum to 1)
-const GRADE_WEIGHTS = {
-  'Senior': 0.4,
-  'Junior': 0.3,
-  'Sophomore': 0.2,
-  'Freshman': 0.1,
-} as const;
 
 // Helper to get a random integer between min and max (inclusive)
 const getRandomInt = (min: number, max: number): number => {
@@ -27,19 +20,6 @@ const getRandomTimestamp = (start: Date, end: Date): Date => {
   return new Date(randomTime);
 };
 
-// Helper to get a random grade based on weights
-const getRandomGrade = (): string => {
-  const random = Math.random();
-  let sum = 0;
-  
-  for (const [grade, weight] of Object.entries(GRADE_WEIGHTS)) {
-    sum += weight;
-    if (random <= sum) return grade;
-  }
-  
-  return 'Senior'; // Fallback
-};
-
 // Main function to generate demo attendance data
 export async function generateDemoAttendanceData(gameId: string): Promise<DemoAttendanceRecord[]> {
   // Find the game configuration
@@ -50,17 +30,22 @@ export async function generateDemoAttendanceData(gameId: string): Promise<DemoAt
   const checkInStart = new Date(game.checkInStart);
   const checkInEnd = new Date(game.checkInEnd);
 
-  // Generate a random total number of check-ins (between 150 and 500)
-  const totalCheckIns = getRandomInt(150, 500);
-
-  // Generate individual check-in records
+  // Generate individual check-in records per grade, respecting maximum class sizes
   const records: DemoAttendanceRecord[] = [];
 
-  for (let i = 0; i < totalCheckIns; i++) {
-    records.push({
-      timestamp: getRandomTimestamp(checkInStart, checkInEnd),
-      grade: getRandomGrade(),
-    });
+  // Iterate through each grade and simulate realistic attendance
+  for (const [grade, maxSize] of Object.entries(GRADE_SIZES)) {
+    // Generate a realistic attendance percentage for this grade (20-95%)
+    const attendancePercentage = getRandomInt(20, 95) / 100;
+    const checkInsForGrade = Math.floor(maxSize * attendancePercentage);
+
+    // Generate records for this grade
+    for (let i = 0; i < checkInsForGrade; i++) {
+      records.push({
+        timestamp: getRandomTimestamp(checkInStart, checkInEnd),
+        grade: grade,
+      });
+    }
   }
 
   // Sort records by timestamp

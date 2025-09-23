@@ -1,6 +1,7 @@
 'use client';
 
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { GRADE_SIZES } from '@/lib/grade-config';
 
 interface GradePieChartProps {
   gradeCounts: Record<string, number>;
@@ -41,7 +42,12 @@ export function GradePieChart({ gradeCounts }: GradePieChartProps) {
               ))}
             </Pie>
             <Tooltip 
-              formatter={(value, name) => [`${value} students`, name]}
+              formatter={(value, name) => {
+                const grade = name as keyof typeof GRADE_SIZES;
+                const total = GRADE_SIZES[grade];
+                const percentage = ((Number(value) / total) * 100).toFixed(1);
+                return [`${value} / ${total} (${percentage}%)`, grade];
+              }}
               labelStyle={{ fontSize: '14px' }}
               contentStyle={{ 
                 backgroundColor: 'rgba(255, 255, 255, 0.95)', 
