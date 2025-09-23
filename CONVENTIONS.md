@@ -22,10 +22,11 @@ This project is built using a modern, type-safe stack with an AI-first workflow 
 
 ## 4. Coding Style & Best Practices
 
--   **Type Safety:** TypeScript is mandatory. Avoid the `any` type; prefer `unknown` or define explicit types.
--   **Function Style:** Use function declarations for React components (`function MyComponent() {}`). Use `const` arrow functions for handlers and utilities (`const handleCheckIn = async () => {}`).
+-   **Type Safety:** TypeScript is mandatory. Avoid `any`; prefer `unknown` or define explicit types.
+-   **Function Style:** Use function declarations for React components (`function MyComponent() {}`). Use `const` arrow functions for handlers and utilities.
 -   **Imports:** Use absolute imports with the `@/*` alias (e.g., `import { supabase } from '@/lib/supabase'`).
--   **Environment Variables:** All secrets (Supabase keys, dashboard password) must be in `.env.local` and accessed via `process.env`. Prefix browser-exposed variables with `NEXT_PUBLIC_`.
+-   **Environment Variables:** All secrets must be in `.env.local` and accessed via `process.env`. Prefix browser-exposed variables with `NEXT_PUBLIC_`.
+-   **Component Composition:** Favor creating smaller, single-purpose components over large, multi-state ones. Decompose complex UI into distinct components (e.g., `CheckInButton`, `LoadingSpinner`, `ErrorMessage`).
 -   **Server Components First:** Default to Server Components. Only apply the `'use client'` directive to the smallest possible leaf components that require interactivity.
 
 ## 5. Supabase Integration

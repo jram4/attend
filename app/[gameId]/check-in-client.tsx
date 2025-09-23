@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import SuccessClient from './success-client'
+import { createClient } from '@/lib/supabase/client'
 import { GAMES } from '@/lib/game-config'
 
 type Props = {
@@ -92,20 +92,15 @@ function StatusTimer({ game }: { game: typeof GAMES[number] }) {
   )
 }
 
-interface DemoResult {
-  status: 'idle' | 'loading' | 'success' | 'already-checked-in' | 'error'
+interface ComponentState {
+  status: 'idle' | 'loading' | 'error'
   message?: string
 }
 
 export default function CheckInClient({ game, session, checkInResult, showHeader = true }: Props) {
-  const [demoResult, setDemoResult] = useState<DemoResult>({ status: 'idle' })
+  const [componentState, setComponentState] = useState<ComponentState>({ status: 'idle' })
 
-  // Client-side router: render success screen as full-page replacement
-  if (demoResult.status === 'success') {
-    return <SuccessClient />
-  }
-
-  // Original check-in layout for all other states
+  // Check-in layout
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex flex-col">
       {/* Header (hide if parent already renders a title) */}
@@ -127,11 +122,24 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
 
       {/* Main CTA + States */}
       <main className="flex-1 flex items-center justify-center p-5">
-        {demoResult.status === 'idle' && (
+        {componentState.status === 'idle' && (
           <button
-            onClick={() => {
-              setDemoResult({ status: 'loading', message: 'Checking you in…' })
-              setTimeout(() => setDemoResult({ status: 'success', message: 'You are checked in!' }), 5000)
+            onClick={async () => {
+              setComponentState({ status: 'loading', message: 'Redirecting to sign-in...' })
+              try {
+                const supabase = createClient()
+                const { error } = await supabase.auth.signInWithOAuth({
+                  provider: 'google',
+                  options: {
+                    redirectTo: `${window.location.origin}/auth/callback?next=/${game.id}/checked-in`
+                  }
+                })
+                if (error) {
+                  setComponentState({ status: 'error', message: error.message })
+                }
+              } catch (err) {
+                setComponentState({ status: 'error', message: 'Failed to initiate sign-in' })
+              }
             }}
             className="relative w-full max-w-md h-[64vh] rounded-[28px] bg-gradient-to-br from-blue-600 to-indigo-700 text-white drop-shadow-2xl shadow-[0_18px_40px_rgba(0,0,0,0.25)] ring-1 ring-white/10 border border-white/10 flex flex-col items-center justify-center gap-2 active:translate-y-[1px] active:shadow-[0_10px_24px_rgba(0,0,0,0.25)] focus:outline-none focus-visible:ring-4 focus-visible:ring-white/30 hover:scale-[1.01] transition-transform"
             aria-label="Check In with ESD"
@@ -146,19 +154,19 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
           </button>
         )}
 
-        {demoResult.status === 'loading' && (
+        {componentState.status === 'loading' && (
           <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-gray-200 bg-white/90 shadow-xl backdrop-blur flex flex-col items-center justify-center">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mb-6" />
-            <p className="text-lg font-semibold text-gray-700">{demoResult.message}</p>
+            <p className="text-lg font-semibold text-gray-700">{componentState.message}</p>
           </div>
         )}
 
-        {demoResult.status === 'error' && (
+        {componentState.status === 'error' && (
           <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-red-200 bg-red-50/90 shadow-xl backdrop-blur flex flex-col items-center justify-center text-red-800 p-6">
             <div className="text-7xl mb-4">❌</div>
-            <h2 className="text-2xl font-bold mb-2">{demoResult.message || 'Something went wrong'}</h2>
+            <h2 className="text-2xl font-bold mb-2">{componentState.message || 'Something went wrong'}</h2>
             <button
-              onClick={() => setDemoResult({ status: 'idle' })}
+              onClick={() => setComponentState({ status: 'idle' })}
               className="rounded-xl bg-gray-900 text-white px-5 py-3 text-sm font-semibold shadow-md active:scale-[.99]"
             >
               Try Again
