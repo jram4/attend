@@ -1,16 +1,29 @@
 'use client'
 
-type Props = {
-  onDone: () => void
-}
+import { CheckCircle2 } from 'lucide-react'
 
-export default function SuccessClient({ onDone }: Props) {
+export default function SuccessClient() {
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
-      <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-emerald-200 bg-emerald-50/90 shadow-xl backdrop-blur flex flex-col items-center justify-center text-emerald-800 p-6 text-center">
-        <div className="text-7xl mb-4">✅</div>
-        <h2 className="text-2xl font-bold mb-2">You're Checked In!</h2>
-        <p className="text-sm opacity-90 mb-6">Thank you for participating. Enjoy the game!</p>
+    <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-blue-50 flex flex-col items-center justify-center px-6 py-12">
+      <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
+        {/* Main Icon */}
+        <div className="mb-8">
+          <CheckCircle2
+            size={120}
+            className="text-blue-600 drop-shadow-lg"
+            strokeWidth={1.5}
+          />
+        </div>
+
+        {/* Primary Headline */}
+        <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-tight">
+          You're Checked In!
+        </h1>
+
+        {/* Secondary Message */}
+        <p className="text-lg text-gray-700 mb-4 leading-relaxed max-w-sm">
+          Thank you for showing your school spirit. Enjoy the game!
+        </p>
       </div>
     </div>
   )

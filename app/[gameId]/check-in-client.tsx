@@ -102,7 +102,7 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
 
   // Client-side router: render success screen as full-page replacement
   if (demoResult.status === 'success') {
-    return <SuccessClient onDone={() => setDemoResult({ status: 'idle' })} />
+    return <SuccessClient />
   }
 
   // Original check-in layout for all other states
