@@ -42,26 +42,23 @@ export function AdminDashboardClient({ adminLogout }: AdminDashboardClientProps)
   );
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-12">
-        <h1 className="text-4xl font-bold text-slate-900">Attendance Dashboard</h1>
-        <button
-          onClick={() => adminLogout()}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
-        >
-          Logout
-        </button>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-slate-900 leading-tight">Dashboard</h1>
+        <h2 className="text-lg font-medium text-slate-600">THE HORDE</h2>
       </div>
 
-      <div className="mb-8">
-        <label htmlFor="game-select" className="block text-sm font-medium text-gray-700 mb-2">
+      {/* Game Selection */}
+      <div className="mb-6">
+        <label htmlFor="game-select" className="block text-sm font-medium text-slate-700 mb-2">
           Select Game
         </label>
         <select
           id="game-select"
           value={selectedGameId}
           onChange={(e) => setSelectedGameId(e.target.value)}
-          className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          className="block w-full px-4 py-3 bg-white/70 backdrop-blur-xl border border-slate-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
         >
           {GAMES.map((game) => (
             <option key={game.id} value={game.id}>
@@ -72,20 +69,30 @@ export function AdminDashboardClient({ adminLogout }: AdminDashboardClientProps)
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading data...</p>
+        <div className="flex flex-col items-center justify-center py-16">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900 mx-auto"></div>
+          <p className="mt-4 text-slate-600">Loading data...</p>
         </div>
       ) : (
-        <>
+        <div className="space-y-6">
           <StatsCards gradeCounts={gradeCounts} totalCount={attendanceData.length} />
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div className="space-y-6">
             <GradePieChart gradeCounts={gradeCounts} />
             <AttendanceLineChart data={timeSeriesData} />
           </div>
-        </>
+        </div>
       )}
+
+      {/* Logout Button - Fixed at bottom */}
+      <div className="fixed bottom-4 right-4">
+        <button
+          onClick={() => adminLogout()}
+          className="bg-red-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-red-700 transition-colors text-sm"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 }
