@@ -6,7 +6,7 @@ interface GradePieChartProps {
   gradeCounts: Record<string, number>;
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#1e40af', '#7c3aed', '#059669', '#d97706'];
 const GRADES = ['Senior', 'Junior', 'Sophomore', 'Freshman'];
 
 export function GradePieChart({ gradeCounts }: GradePieChartProps) {
@@ -16,8 +16,8 @@ export function GradePieChart({ gradeCounts }: GradePieChartProps) {
   }));
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
-      <h2 className="text-xl font-semibold mb-4">Attendance by Grade</h2>
+    <div className="bg-white p-10 rounded-lg border border-slate-200 shadow-sm">
+      <h2 className="text-3xl font-bold text-slate-900 mb-6">Attendance by Grade</h2>
       <div className="w-full h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>

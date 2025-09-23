@@ -9,18 +9,18 @@ interface AttendanceLineChartProps {
 }
 
 const COLORS = {
-  Senior: '#0088FE',
-  Junior: '#00C49F',
-  Sophomore: '#FFBB28',
-  Freshman: '#FF8042',
+  Senior: '#1e40af',
+  Junior: '#7c3aed',
+  Sophomore: '#059669',
+  Freshman: '#d97706',
 };
 
 const GRADES = ['Senior', 'Junior', 'Sophomore', 'Freshman'] as const;
 
 export function AttendanceLineChart({ data }: AttendanceLineChartProps) {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
-      <h2 className="text-xl font-semibold mb-4">Check-in Timeline</h2>
+    <div className="bg-white p-10 rounded-lg border border-slate-200 shadow-sm">
+      <h2 className="text-3xl font-bold text-slate-900 mb-6">Check-in Timeline</h2>
       <div className="w-full h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
