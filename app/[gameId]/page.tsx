@@ -36,10 +36,11 @@ export default async function GamePage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="text-center max-w-md">
-        <CheckInClient game={game} session={session} checkInResult={checkInResult} />
-      </div>
-    </div>
+    <CheckInClient
+      game={game}
+      session={session}
+      checkInResult={checkInResult}
+      showHeader={true}
+    />
   )
 }
