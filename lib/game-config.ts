@@ -1,7 +1,7 @@
 export const GAMES = [
   {
     id: 'homecoming-2025',
-    name: 'Homecoming 2025 vs. Central High',
+    name: 'Homecoming 2025 vs. St. Marks',
     checkInStart: '2025-09-23T18:00:00Z',
     checkInEnd: '2025-09-23T21:00:00Z',
   },
