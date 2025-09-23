@@ -2,8 +2,8 @@ export const GAMES = [
   {
     id: 'homecoming-2025',
     name: 'Homecoming 2025 vs. Central High',
-    checkInStart: '2025-09-23T18:00:00Z',
-    checkInEnd: '2025-09-23T21:00:00Z',
+    checkInStart: '2025-09-22T18:00:00Z',
+    checkInEnd: '2025-09-22T21:00:00Z',
   },
   {
     id: 'week-2-vs-northridge',

@@ -42,26 +42,26 @@ export function AdminDashboardClient({ adminLogout }: AdminDashboardClientProps)
   );
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-12">
-        <h1 className="text-5xl font-bold text-blue-900">Attendance Dashboard</h1>
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Attendance Dashboard</h1>
         <button
           onClick={() => adminLogout()}
-          className="bg-slate-100 text-slate-700 px-6 py-3 text-lg font-semibold rounded-md hover:bg-slate-200 transition-colors"
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
         >
           Logout
         </button>
       </div>
 
-      <div className="mb-12">
-        <label htmlFor="game-select" className="block text-2xl font-semibold text-slate-800 mb-3">
+      <div className="mb-8">
+        <label htmlFor="game-select" className="block text-sm font-medium text-gray-700 mb-2">
           Select Game
         </label>
         <select
           id="game-select"
           value={selectedGameId}
           onChange={(e) => setSelectedGameId(e.target.value)}
-          className="block w-full px-4 py-2 border border-slate-200 rounded-md shadow-sm focus:ring-blue-800 focus:border-blue-800 focus:outline-none"
+          className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         >
           {GAMES.map((game) => (
             <option key={game.id} value={game.id}>
@@ -72,15 +72,15 @@ export function AdminDashboardClient({ adminLogout }: AdminDashboardClientProps)
       </div>
 
       {isLoading ? (
-        <div className="text-center py-16">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-900 mx-auto"></div>
-          <p className="mt-6 text-2xl font-medium text-slate-700">Loading data...</p>
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading data...</p>
         </div>
       ) : (
         <>
           <StatsCards gradeCounts={gradeCounts} totalCount={attendanceData.length} />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             <GradePieChart gradeCounts={gradeCounts} />
             <AttendanceLineChart data={timeSeriesData} />
           </div>
