@@ -8,7 +8,7 @@ export default async function CheckedInPage({
 }: {
   params: { gameId: string }
 }) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   console.log('Supabase client created:', !!supabase)
   console.log('Supabase auth exists:', !!supabase?.auth)
