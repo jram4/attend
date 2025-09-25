@@ -11,7 +11,7 @@ Quick and secure attendance tracking
 2. **Sign In with School** - Secure OAuth authentication using your school credentials
 3. **You're Checked In!** - Your attendance is recorded and contributes to your grade's score
 
-![Student check-in interface](public/checkin.png)
+<img src="public/checkin.png" alt="Student check-in interface" width="200"/>
 
 ## 📊 Admin Dashboard
 
@@ -24,7 +24,7 @@ Real-time attendance analytics
 
 [![Access Admin Dashboard](https://img.shields.io/badge/Access%20Admin%20Dashboard-Click%20Here-purple?style=for-the-badge)](/admin)
 
-![Admin dashboard interface](public/admin.png)
+<img src="public/admin.png" alt="Admin dashboard interface" width="200"/>
 
 ## Why Attendance Matters
 
