@@ -43,7 +43,7 @@ export async function checkInUser(gameId: string) {
   }
 
   // 4. Determine the user's grade
-  const userGrade = getGradeFromEmail(user.email!)
+  const userGrade = await getGradeFromEmail(user.email!)
 
   // 5. Attempt to insert the attendance record into the database
   try {

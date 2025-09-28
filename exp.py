@@ -8,8 +8,20 @@ EXCLUDED_DIRS = {
     '.next',
     'build',
     'out',
-    'coverage',
     '.vercel',
+    '.expo', 
+    '.vscode', 
+    'node_modules', 
+    '__pycache__', 
+    '.git',
+    'assets'
+}
+
+EXCLUDED_FILES = {
+    'package-lock.json', 
+    '.gitignore',
+    'exp.py',
+    # --- ADD ALL .env FILES HERE ---
     '.env',
     '.env.local',
     '.env.development.local',
@@ -20,19 +32,6 @@ EXCLUDED_DIRS = {
     '.env.production',
     '.env.example',
     '.env.development.example',
-    '.expo', 
-    '.vscode', 
-    'node_modules', 
-    '__pycache__', 
-    '.git',
-    'assets' # Excluding assets folder as it contains binary images/fonts
-}
-
-# Specific individual files to ignore
-EXCLUDED_FILES = {
-    'package-lock.json', 
-    '.gitignore',
-    'exp.py' # Ignore the script itself
 }
 
 # File extensions to ignore (mostly binary or non-essential files)
