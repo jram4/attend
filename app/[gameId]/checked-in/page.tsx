@@ -1,5 +1,8 @@
+// app/[gameId]/checked-in/page.tsx
+
 import { createClient } from '@/lib/supabase/server'
 import SuccessClient from '../success-client'
+import { checkInUser } from '../actions'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,36 +11,38 @@ export default async function CheckedInPage({
 }: {
   params: { gameId: string }
 }) {
+  // --- THE FIX IS HERE ---
+  // Destructure gameId from params immediately.
+  const { gameId } = params;
+
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  console.log('Supabase client created:', !!supabase)
-  console.log('Supabase auth exists:', !!supabase?.auth)
-
-  const { data: { user }, error } = await supabase.auth.getUser()
-
-  if (error || !user) {
+  if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-blue-50 flex flex-col items-center justify-center px-6 py-12">
-        <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
-          <div className="text-7xl mb-4">❌</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Authentication failed
-          </h1>
-          <p className="text-lg text-gray-700">
-            Please try again.
-          </p>
-        </div>
+      <div className="min-h-screen flex flex-col items-center justify-center text-center p-4">
+        <h1 className="text-2xl font-bold">Authentication Error</h1>
+        <p className="text-gray-600">You are not signed in. Please return to the check-in page.</p>
       </div>
     )
   }
 
-  // Console log user details for verification
-  console.log('User ID:', user.id)
-  console.log('User Email:', user.email)
-  console.log('User Full Name:', user.user_metadata?.full_name)
+  // ATTEMPT TO CHECK THE USER IN using the destructured variable
+  const checkInResult = await checkInUser(gameId) // Use gameId here
 
-  // Extract user name (prefer full_name, fallback to email)
-  const userName = user.user_metadata?.full_name || user.email || 'User'
+  // Handle errors from the check-in action
+  if (checkInResult.status === 'error') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-white via-red-50 to-red-100 flex flex-col items-center justify-center text-center p-4">
+        <div className="text-7xl mb-4">❌</div>
+        <h1 className="text-2xl font-bold text-red-800 mb-2">Check-in Failed</h1>
+        <p className="text-lg text-red-700">{checkInResult.message}</p>
+      </div>
+    )
+  }
+
+  // If successful or already checked in, show the success screen
+  const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'there'
 
   return <SuccessClient userName={userName} />
 }
