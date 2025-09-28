@@ -2,7 +2,7 @@
 
 export const GAMES = [
   {
-    id: 'demo-game',
+    id: 'homecoming-2025',
     name: 'Demo Testing Game',
     checkInStart: '2025-09-25T17:00:00Z',
     checkInEnd: '2025-10-25T17:00:00Z',

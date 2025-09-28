@@ -1,3 +1,5 @@
+// app/[gameId]/check-in-client.tsx
+
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -11,10 +13,10 @@ type Props = {
   showHeader?: boolean;
 }
 
-// --- Demo game, constants, and helpers (CT accurate) ---
+// --- Constants and Helpers ---
 
+// Your school's logo remains constant
 const ESD_LOGO = 'https://bvmsports.com/wp-content/uploads/2021/12/20181010230955_782_mascotOrig-150x150.png'
-const OPPONENT_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/2/2d/StMarksTexas.jpg'
 const TZ = 'America/Chicago' as const
 
 function formatFullWindow(start: Date, end: Date) {
@@ -110,9 +112,24 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
             <div className="flex items-center gap-4 drop-shadow">
               <img src={ESD_LOGO} alt="ESD" className="h-16 w-16 object-contain" />
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-gray-500">VS</span>
-              <img src={OPPONENT_LOGO} alt="St. Marks" className="h-16 w-16 object-contain" />
+              <img src={game.opponentLogoUrl} alt="Opponent Logo" className="h-16 w-16 object-contain" />
             </div>
             <h1 className="mt-3 text-xl font-bold text-gray-900">{game.name}</h1>
+            
+            {/* Home/Away Badge */}
+            <div className="mt-2 flex items-center justify-center gap-x-3">
+              {game.location === 'H' && (
+                <span className="bg-blue-100 text-blue-800 text-xs font-bold uppercase px-2 py-0.5 rounded-full">
+                  Home
+                </span>
+              )}
+              {game.location === 'A' && (
+                <span className="bg-slate-100 text-slate-800 text-xs font-bold uppercase px-2 py-0.5 rounded-full">
+                  Away
+                </span>
+              )}
+            </div>
+            
             <p className="mt-1 text-sm text-gray-600">{formatFullWindow(new Date(game.checkInStart), new Date(game.checkInEnd))}</p>
             <div className="mt-2"><StatusTimer game={game} /></div>
             <p className="mt-1 text-[11px] text-gray-500">Check-in window: {formatCheckInWindow(new Date(game.checkInStart), new Date(game.checkInEnd))}</p>
