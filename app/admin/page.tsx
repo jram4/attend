@@ -1,9 +1,15 @@
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { adminLogin, adminLogout } from './actions';
+import { adminClient } from '@/lib/supabase/admin';
 import { AdminDashboardClient } from './dashboard-client';
 
 export const dynamic = 'force-dynamic';
+
+export type AttendanceRow = {
+  created_at: string;
+  game_id: string;
+  user_grade: string | null;
+};
 
 export default async function AdminPage({ searchParams }: { searchParams: { error?: string } }) {
   const cookieStore = await cookies();
@@ -57,5 +63,18 @@ export default async function AdminPage({ searchParams }: { searchParams: { erro
     );
   }
 
-  return <AdminDashboardClient adminLogout={adminLogout} />;
+  // --- fetch real data (same as your updated impl) ---
+  const { data, error } = await adminClient
+    .from('attendance')
+    .select('created_at, game_id, user_grade')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('[AdminPage] attendance fetch error:', error);
+    throw new Error(`Failed to load attendance: ${error.message}`);
+  }
+
+  const rows = (data ?? []) as AttendanceRow[];
+
+  return <AdminDashboardClient rows={rows} adminLogout={adminLogout} />;
 }

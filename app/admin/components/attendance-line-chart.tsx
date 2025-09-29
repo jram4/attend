@@ -1,8 +1,6 @@
 'use client';
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { DemoAttendanceRecord } from '@/lib/demo-data';
-import { GAMES } from '@/lib/game-config';
 
 interface AttendanceLineChartProps {
   data: Array<{ time: string; Senior: number; Junior: number; Sophomore: number; Freshman: number }>;
@@ -33,6 +31,7 @@ export function AttendanceLineChart({ data }: AttendanceLineChartProps) {
               tickLine={{ stroke: '#94a3b8' }}
             />
             <YAxis 
+              allowDecimals={false}
               tick={{ fontSize: 11 }}
               axisLine={{ stroke: '#94a3b8' }}
               tickLine={{ stroke: '#94a3b8' }}
@@ -46,10 +45,7 @@ export function AttendanceLineChart({ data }: AttendanceLineChartProps) {
                 fontSize: '14px'
               }}
             />
-            <Legend 
-              wrapperStyle={{ fontSize: '14px' }}
-              iconSize={12}
-            />
+            <Legend wrapperStyle={{ fontSize: '14px' }} iconSize={12} />
             {GRADES.map((grade) => (
               <Line
                 key={grade}

@@ -4,11 +4,11 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recha
 import { GRADE_SIZES } from '@/lib/grade-config';
 
 interface GradePieChartProps {
-  gradeCounts: Record<string, number>;
+  gradeCounts: Record<'Senior' | 'Junior' | 'Sophomore' | 'Freshman', number>;
 }
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-const GRADES = ['Senior', 'Junior', 'Sophomore', 'Freshman'];
+const GRADES = ['Senior', 'Junior', 'Sophomore', 'Freshman'] as const;
 
 export function GradePieChart({ gradeCounts }: GradePieChartProps) {
   const data = GRADES.map((grade) => ({
@@ -32,12 +32,11 @@ export function GradePieChart({ gradeCounts }: GradePieChartProps) {
               dataKey="value"
               label={({ name, percent }) => {
                 if (typeof percent !== 'number') return '';
-                // Only show label if percentage is above 5% to avoid crowding
                 return (percent * 100) > 5 ? `${name}` : '';
               }}
               fontSize={12}
             >
-              {data.map((entry, index) => (
+              {data.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
@@ -45,7 +44,7 @@ export function GradePieChart({ gradeCounts }: GradePieChartProps) {
               formatter={(value, name) => {
                 const grade = name as keyof typeof GRADE_SIZES;
                 const total = GRADE_SIZES[grade];
-                const percentage = ((Number(value) / total) * 100).toFixed(1);
+                const percentage = total ? ((Number(value) / total) * 100).toFixed(1) : '0.0';
                 return [`${value} / ${total} (${percentage}%)`, grade];
               }}
               labelStyle={{ fontSize: '14px' }}
@@ -56,10 +55,7 @@ export function GradePieChart({ gradeCounts }: GradePieChartProps) {
                 fontSize: '14px'
               }}
             />
-            <Legend 
-              wrapperStyle={{ fontSize: '14px' }}
-              iconSize={12}
-            />
+            <Legend wrapperStyle={{ fontSize: '14px' }} iconSize={12} />
           </PieChart>
         </ResponsiveContainer>
       </div>

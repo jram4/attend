@@ -1,24 +1,23 @@
 'use client';
 
-import { Users, GraduationCap, BookOpen, School, UserCheck } from 'lucide-react';
+import { GraduationCap, BookOpen, School, UserCheck } from 'lucide-react';
 import { GRADE_SIZES } from '@/lib/grade-config';
 
 interface StatsCardsProps {
-  gradeCounts: Record<string, number>;
+  gradeCounts: Record<'Senior' | 'Junior' | 'Sophomore' | 'Freshman', number>;
   totalCount: number;
 }
 
 export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
-  // Calculate total student body
   const totalStudents = Object.values(GRADE_SIZES).reduce((sum, size) => sum + size, 0);
-  const totalPercentage = ((totalCount / totalStudents) * 100).toFixed(1);
+  const totalPercentage = totalStudents ? ((totalCount / totalStudents) * 100).toFixed(1) : '0.0';
 
   const gradeCards = [
     { 
       title: 'Senior', 
       count: gradeCounts.Senior || 0, 
       total: GRADE_SIZES.Senior,
-      percentage: (((gradeCounts.Senior || 0) / GRADE_SIZES.Senior) * 100).toFixed(1),
+      percentage: GRADE_SIZES.Senior ? (((gradeCounts.Senior || 0) / GRADE_SIZES.Senior) * 100).toFixed(1) : '0.0',
       Icon: GraduationCap, 
       iconColor: 'text-purple-700' 
     },
@@ -26,7 +25,7 @@ export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
       title: 'Junior', 
       count: gradeCounts.Junior || 0, 
       total: GRADE_SIZES.Junior,
-      percentage: (((gradeCounts.Junior || 0) / GRADE_SIZES.Junior) * 100).toFixed(1),
+      percentage: GRADE_SIZES.Junior ? (((gradeCounts.Junior || 0) / GRADE_SIZES.Junior) * 100).toFixed(1) : '0.0',
       Icon: BookOpen, 
       iconColor: 'text-emerald-700' 
     },
@@ -34,7 +33,7 @@ export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
       title: 'Sophomore', 
       count: gradeCounts.Sophomore || 0, 
       total: GRADE_SIZES.Sophomore,
-      percentage: (((gradeCounts.Sophomore || 0) / GRADE_SIZES.Sophomore) * 100).toFixed(1),
+      percentage: GRADE_SIZES.Sophomore ? (((gradeCounts.Sophomore || 0) / GRADE_SIZES.Sophomore) * 100).toFixed(1) : '0.0',
       Icon: School, 
       iconColor: 'text-amber-700' 
     },
@@ -42,11 +41,11 @@ export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
       title: 'Freshman', 
       count: gradeCounts.Freshman || 0, 
       total: GRADE_SIZES.Freshman,
-      percentage: (((gradeCounts.Freshman || 0) / GRADE_SIZES.Freshman) * 100).toFixed(1),
+      percentage: GRADE_SIZES.Freshman ? (((gradeCounts.Freshman || 0) / GRADE_SIZES.Freshman) * 100).toFixed(1) : '0.0',
       Icon: UserCheck, 
       iconColor: 'text-red-700' 
     },
-  ];
+  ] as const;
 
   return (
     <div>

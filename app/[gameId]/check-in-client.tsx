@@ -47,14 +47,6 @@ function formatCheckInWindow(start: Date, end: Date) {
   return `${s} – ${e} CT`
 }
 
-function useNow(tickMs = 1000) {
-  const [now, setNow] = useState(new Date())
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), tickMs)
-    return () => clearInterval(id)
-  }, [tickMs])
-  return now
-}
 
 function toHMS(ms: number) {
   const totalSeconds = Math.max(0, Math.floor(Math.abs(ms) / 1000))
@@ -66,23 +58,49 @@ function toHMS(ms: number) {
 }
 
 function StatusTimer({ game }: { game: typeof GAMES[number] }) {
-  const now = useNow(1000)
   const gameStart = new Date(game.checkInStart)
   const gameEnd = new Date(game.checkInEnd)
 
-  if (now < gameStart) {
+  // Start with null so SSR and first client paint match a placeholder.
+  const [now, setNow] = useState<number | null>(null)
+
+  useEffect(() => {
+    // Turn on the clock only on the client.
+    setNow(Date.now())
+    const id = window.setInterval(() => setNow(Date.now()), 1000)
+    return () => window.clearInterval(id)
+  }, [])
+
+  const currentTime = now ? new Date(now) : null
+
+  if (!currentTime) {
+    // Render stable placeholder during SSR and initial client render
     return (
       <div className="text-center">
-        <div className="text-sm font-semibold text-amber-700 mb-1">Check-in opens in</div>
-        <div className="text-4xl font-mono font-extrabold text-amber-600">{toHMS(gameStart.getTime() - now.getTime())}</div>
+        <div className="text-4xl font-mono font-extrabold text-emerald-600">
+          <span suppressHydrationWarning>00:00:00</span>
+        </div>
       </div>
     )
   }
-  if (now >= gameStart && now <= gameEnd) {
+
+  if (currentTime < gameStart) {
+    return (
+      <div className="text-center">
+        <div className="text-sm font-semibold text-amber-700 mb-1">Check-in opens in</div>
+        <div className="text-4xl font-mono font-extrabold text-amber-600">
+          <span suppressHydrationWarning>{toHMS(gameStart.getTime() - currentTime.getTime())}</span>
+        </div>
+      </div>
+    )
+  }
+  if (currentTime >= gameStart && currentTime <= gameEnd) {
     return (
       <div className="text-center">
         <div className="text-sm font-semibold text-emerald-700 mb-1">Check-in closes in</div>
-        <div className="text-4xl font-mono font-extrabold text-emerald-600">{toHMS(gameEnd.getTime() - now.getTime())}</div>
+        <div className="text-4xl font-mono font-extrabold text-emerald-600">
+          <span suppressHydrationWarning>{toHMS(gameEnd.getTime() - currentTime.getTime())}</span>
+        </div>
       </div>
     )
   }
