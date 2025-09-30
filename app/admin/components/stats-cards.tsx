@@ -1,17 +1,15 @@
-'use client';
+// app/admin/components/stats-cards.tsx
+'use client'
 
-import { GraduationCap, BookOpen, School, UserCheck } from 'lucide-react';
-import { GRADE_SIZES } from '@/lib/grade-config';
+import { GraduationCap, BookOpen, School, UserCheck } from 'lucide-react'
+import { GRADE_SIZES } from '@/lib/grade-config'
 
 interface StatsCardsProps {
-  gradeCounts: Record<'Senior' | 'Junior' | 'Sophomore' | 'Freshman', number>;
-  totalCount: number;
+  gradeCounts: Record<'Senior' | 'Junior' | 'Sophomore' | 'Freshman', number>
+  totalCount: number
 }
 
 export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
-  const totalStudents = Object.values(GRADE_SIZES).reduce((sum, size) => sum + size, 0);
-  const totalPercentage = totalStudents ? ((totalCount / totalStudents) * 100).toFixed(1) : '0.0';
-
   const gradeCards = [
     { 
       title: 'Senior', 
@@ -19,7 +17,8 @@ export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
       total: GRADE_SIZES.Senior,
       percentage: GRADE_SIZES.Senior ? (((gradeCounts.Senior || 0) / GRADE_SIZES.Senior) * 100).toFixed(1) : '0.0',
       Icon: GraduationCap, 
-      iconColor: 'text-purple-700' 
+      color: 'from-purple-500 to-purple-600',
+      textColor: 'text-purple-700'
     },
     { 
       title: 'Junior', 
@@ -27,7 +26,8 @@ export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
       total: GRADE_SIZES.Junior,
       percentage: GRADE_SIZES.Junior ? (((gradeCounts.Junior || 0) / GRADE_SIZES.Junior) * 100).toFixed(1) : '0.0',
       Icon: BookOpen, 
-      iconColor: 'text-emerald-700' 
+      color: 'from-emerald-500 to-emerald-600',
+      textColor: 'text-emerald-700'
     },
     { 
       title: 'Sophomore', 
@@ -35,7 +35,8 @@ export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
       total: GRADE_SIZES.Sophomore,
       percentage: GRADE_SIZES.Sophomore ? (((gradeCounts.Sophomore || 0) / GRADE_SIZES.Sophomore) * 100).toFixed(1) : '0.0',
       Icon: School, 
-      iconColor: 'text-amber-700' 
+      color: 'from-amber-500 to-amber-600',
+      textColor: 'text-amber-700'
     },
     { 
       title: 'Freshman', 
@@ -43,40 +44,42 @@ export function StatsCards({ gradeCounts, totalCount }: StatsCardsProps) {
       total: GRADE_SIZES.Freshman,
       percentage: GRADE_SIZES.Freshman ? (((gradeCounts.Freshman || 0) / GRADE_SIZES.Freshman) * 100).toFixed(1) : '0.0',
       Icon: UserCheck, 
-      iconColor: 'text-red-700' 
+      color: 'from-red-500 to-red-600',
+      textColor: 'text-red-700'
     },
-  ] as const;
+  ] as const
 
   return (
-    <div>
-      {/* Total Count Display */}
-      <div className="text-center mb-4">
-        <p className="text-lg font-medium text-slate-700">
-          Total Attendance: <span className="font-bold text-slate-900">{totalCount}</span>
-        </p>
-        <p className="text-sm text-slate-500">
-          {totalCount} out of {totalStudents} ({totalPercentage}%)
-        </p>
-      </div>
-      
-      {/* 2x2 Grid for Grade Cards */}
-      <div className="grid grid-cols-2 gap-3">
-        {gradeCards.map((card) => (
-          <div
-            key={card.title}
-            className="bg-white/70 backdrop-blur-xl p-4 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-slate-600">{card.title}</h3>
-              <card.Icon className={`h-6 w-6 ${card.iconColor}`} />
-            </div>
-            <p className="text-3xl font-bold text-slate-900">{card.count}</p>
-            <p className="text-sm text-slate-500">
-              out of {card.total} ({card.percentage}%)
-            </p>
+    <div className="grid grid-cols-2 gap-3">
+      {gradeCards.map((card) => (
+        <div
+          key={card.title}
+          className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
+              {card.title}
+            </h3>
+            <card.Icon className={`h-5 w-5 ${card.textColor}`} />
           </div>
-        ))}
-      </div>
+          <div className="space-y-1">
+            <p className="text-3xl font-bold text-slate-900">{card.count}</p>
+            <div className="flex items-baseline gap-1">
+              <p className="text-xs text-slate-500">of {card.total}</p>
+              <p className={`text-xs font-semibold ${card.textColor}`}>
+                ({card.percentage}%)
+              </p>
+            </div>
+          </div>
+          {/* Progress bar */}
+          <div className="mt-2 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+            <div 
+              className={`h-full bg-gradient-to-r ${card.color} transition-all duration-500`}
+              style={{ width: `${card.percentage}%` }}
+            />
+          </div>
+        </div>
+      ))}
     </div>
-  );
+  )
 }

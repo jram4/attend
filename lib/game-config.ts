@@ -6,8 +6,9 @@ export const GAMES = [
     name: 'Demo Testing Game',
     checkInStart: '2025-09-25T17:00:00Z',
     checkInEnd: '2025-10-25T17:00:00Z',
-    location: 'H', // 'H' for Home, 'A' for Away
+    location: 'H',
     opponentLogoUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2d/StMarksTexas.jpg',
+    coordinates: { lat: 32.92047299327883, lng: -96.8879935211248 },
   },
   {
     id: 'aug-29-vs-bishop-dunne',
@@ -16,6 +17,7 @@ export const GAMES = [
     checkInEnd: '2025-08-30T02:30:00Z',
     location: 'H',
     opponentLogoUrl: 'https://www.bdcs.org/fs/resource-manager/view/d8db1dd7-99a6-41f1-8e56-21ccb8deba1e',
+    coordinates: { lat: 32.88689582627488, lng: -96.83965699379405 },
   },
   {
     id: 'sep-5-at-trinity-valley',
@@ -24,6 +26,7 @@ export const GAMES = [
     checkInEnd: '2025-09-06T02:30:00Z',
     location: 'A',
     opponentLogoUrl: 'https://texasschoolproducts.com/wp-content/uploads/2020/12/Trojan_Head2.png',
+    coordinates: { lat: 32.88689582627488, lng: -96.83965699379405 },
   },
   {
     id: 'sep-12-at-second-baptist',
@@ -32,6 +35,7 @@ export const GAMES = [
     checkInEnd: '2025-09-13T02:30:00Z',
     location: 'A',
     opponentLogoUrl: 'https://s3-us-west-2.amazonaws.com/scorestream-team-profile-pictures/264120/20181010231205_369_mascot1280Near.png',
+    coordinates: { lat: 32.88689582627488, lng: -96.83965699379405 },
   },
   {
     id: 'sep-19-vs-all-saints',
@@ -40,6 +44,7 @@ export const GAMES = [
     checkInEnd: '2025-09-20T02:30:00Z',
     location: 'H',
     opponentLogoUrl: 'https://ptfsaints.com/wp-content/uploads/2019/10/circle-s.png',
+    coordinates: { lat: 32.88689582627488, lng: -96.83965699379405 },
   },
   {
     id: 'oct-3-at-episcopal-high',
@@ -48,6 +53,7 @@ export const GAMES = [
     checkInEnd: '2025-10-04T02:30:00Z',
     location: 'A',
     opponentLogoUrl: 'https://www.txhslogoproject.com/wp-content/uploads/2019/02/Houston-Episcopal-Knights.png',
+    coordinates: { lat: 29.715596376018453, lng: -95.45635002119532 },
   },
   {
     id: 'oct-10-vs-kinkaid-school',
@@ -56,6 +62,7 @@ export const GAMES = [
     checkInEnd: '2025-10-11T02:30:00Z',
     location: 'H',
     opponentLogoUrl: 'https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_2/v1657137310/kinkaid/latewjfymfb3x7fqwofy/KinkaidFalcons2_1.jpg',
+    coordinates: { lat: 32.88689582627488, lng: -96.83965699379405 },
   },
   {
     id: 'oct-17-at-john-cooper',
@@ -64,6 +71,7 @@ export const GAMES = [
     checkInEnd: '2025-10-18T02:30:00Z',
     location: 'A',
     opponentLogoUrl: 'https://bbk12e1-cdn.myschoolcdn.com/798/photo/orig_photo715576_6384774.png?w=1920',
+    coordinates: { lat: 30.17373272382606, lng: -95.5246974619894 },
   },
   {
     id: 'oct-24-vs-st-johns',
@@ -72,6 +80,7 @@ export const GAMES = [
     checkInEnd: '2025-10-25T02:30:00Z',
     location: 'H',
     opponentLogoUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/19/Sjeslogo.png',
+    coordinates: { lat: 32.88689582627488, lng: -96.83965699379405 },
   },
   {
     id: 'oct-31-vs-st-marks',
@@ -80,5 +89,6 @@ export const GAMES = [
     checkInEnd: '2025-11-01T02:30:00Z',
     location: 'H',
     opponentLogoUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2d/StMarksTexas.jpg',
+    coordinates: { lat: 32.88689582627488, lng: -96.83965699379405 },
   },
 ] as const;
