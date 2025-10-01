@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { GAMES } from '@/lib/game-config'
-import { getUserLocation, isWithinRadius, type Coordinates } from '@/lib/location-utils'
+// import { getUserLocation, isWithinRadius, type Coordinates } from '@/lib/location-utils' // Commented out as location check is disabled
 
 type Props = {
   game: typeof GAMES[number];
@@ -108,16 +108,42 @@ function StatusTimer({ game }: { game: typeof GAMES[number] }) {
 }
 
 interface ComponentState {
-  status: 'idle' | 'checking-location' | 'location-denied' | 'out-of-range' | 'loading' | 'error'
+  status: 'idle' | 'loading' | 'error'
   message?: string
-  userLocation?: Coordinates
-  distance?: number
 }
 
 export default function CheckInClient({ game, session, checkInResult, showHeader = true }: Props) {
   const [componentState, setComponentState] = useState<ComponentState>({ status: 'idle' })
 
   async function handleCheckIn() {
+    // --- MODIFICATION START ---
+    // Location check has been disabled. The component now proceeds directly to OAuth.
+    setComponentState({ status: 'loading', message: 'Redirecting to sign-in...' })
+
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?next=/${game.id}/checked-in`
+        }
+      })
+
+      if (error) {
+        setComponentState({ status: 'error', message: error.message })
+      }
+    } catch (err) {
+        const error = err as Error
+        setComponentState({
+            status: 'error',
+            message: error.message || 'An unexpected error occurred during sign-in.'
+        })
+    }
+    // --- MODIFICATION END ---
+
+
+    /*
+    // --- ORIGINAL LOCATION CHECK LOGIC (COMMENTED OUT) ---
     // Step 1: Request location
     setComponentState({ status: 'checking-location', message: 'Getting your location...' })
 
@@ -159,9 +185,11 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
         message: error.message || 'Unable to access your location'
       })
     }
+    */
   }
 
-  // Calculate distance helper
+  /*
+  // --- HELPER FUNCTIONS FOR LOCATION (COMMENTED OUT) ---
   function calculateDistance(coord1: Coordinates, coord2: Coordinates): number {
     const R = 3959
     const dLat = toRad(coord2.lat - coord1.lat)
@@ -179,6 +207,7 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
   function toRad(degrees: number): number {
     return degrees * (Math.PI / 180)
   }
+  */
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex flex-col">
@@ -229,42 +258,14 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
           </button>
         )}
 
-        {(componentState.status === 'checking-location' || componentState.status === 'loading') && (
+        {componentState.status === 'loading' && (
           <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-gray-200 bg-white/90 shadow-xl backdrop-blur flex flex-col items-center justify-center">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mb-6" />
             <p className="text-lg font-semibold text-gray-700">{componentState.message}</p>
           </div>
         )}
-
-        {componentState.status === 'location-denied' && (
-          <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-amber-200 bg-amber-50/90 shadow-xl backdrop-blur flex flex-col items-center justify-center text-amber-900 p-6">
-            <div className="text-7xl mb-4">📍</div>
-            <h2 className="text-2xl font-bold mb-2">Location Access Required</h2>
-            <p className="text-center mb-4">{componentState.message}</p>
-            <p className="text-sm text-center mb-6">Please enable location permissions in your browser settings and try again.</p>
-            <button
-              onClick={() => setComponentState({ status: 'idle' })}
-              className="rounded-xl bg-gray-900 text-white px-5 py-3 text-sm font-semibold shadow-md active:scale-[.99]"
-            >
-              Try Again
-            </button>
-          </div>
-        )}
-
-        {componentState.status === 'out-of-range' && (
-          <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-red-200 bg-red-50/90 shadow-xl backdrop-blur flex flex-col items-center justify-center text-red-800 p-6">
-            <div className="text-7xl mb-4">📍</div>
-            <h2 className="text-2xl font-bold mb-2">Too Far Away</h2>
-            <p className="text-center mb-4">{componentState.message}</p>
-            <p className="text-sm text-center text-red-600">You must be at the game to check in.</p>
-            <button
-              onClick={() => setComponentState({ status: 'idle' })}
-              className="mt-6 rounded-xl bg-gray-900 text-white px-5 py-3 text-sm font-semibold shadow-md active:scale-[.99]"
-            >
-              Try Again
-            </button>
-          </div>
-        )}
+        
+        {/* The location-denied and out-of-range states are no longer reachable */}
 
         {componentState.status === 'error' && (
           <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-red-200 bg-red-50/90 shadow-xl backdrop-blur flex flex-col items-center justify-center text-red-800 p-6">
