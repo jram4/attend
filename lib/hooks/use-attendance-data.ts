@@ -1,7 +1,7 @@
 // lib/hooks/use-attendance-data.ts
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 export type AttendanceRow = {
   created_at: string
@@ -10,13 +10,11 @@ export type AttendanceRow = {
 }
 
 interface UseAttendanceDataOptions {
-  gameId: string | 'all'
   pollingInterval?: number
   enabled?: boolean
 }
 
 export function useAttendanceData({
-  gameId,
   pollingInterval = 10000,
   enabled = true,
 }: UseAttendanceDataOptions) {
@@ -24,16 +22,24 @@ export function useAttendanceData({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const [isBackgroundRefresh, setIsBackgroundRefresh] = useState(false)
+  const hasFetchedOnce = useRef(false)
 
   useEffect(() => {
     if (!enabled) return
 
-    async function fetchData() {
+    async function fetchData(isBackground = false) {
       try {
-        const url = `/api/admin/attendance?gameId=${encodeURIComponent(gameId)}`
-        const response = await fetch(url, {
+        if (!isBackground) {
+          setLoading(true)
+        } else {
+          setIsBackgroundRefresh(true)
+        }
+
+        // Always fetch ALL data
+        const response = await fetch('/api/admin/attendance?gameId=all', {
           method: 'GET',
-          credentials: 'include', // Important for cookies
+          credentials: 'include',
         })
 
         if (!response.ok) {
@@ -47,21 +53,27 @@ export function useAttendanceData({
         setData(result.data ?? [])
         setLastUpdated(new Date(result.timestamp))
         setError(null)
+        hasFetchedOnce.current = true
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch data')
       } finally {
         setLoading(false)
+        setIsBackgroundRefresh(false)
       }
     }
 
     // Initial fetch
-    fetchData()
+    fetchData(false)
 
-    // Set up polling
-    const interval = setInterval(fetchData, pollingInterval)
+    // Set up polling (background fetches)
+    const interval = setInterval(() => {
+      if (hasFetchedOnce.current) {
+        fetchData(true)
+      }
+    }, pollingInterval)
 
     return () => clearInterval(interval)
-  }, [gameId, pollingInterval, enabled])
+  }, [pollingInterval, enabled])
 
-  return { data, loading, error, lastUpdated }
+  return { data, loading, error, lastUpdated, isBackgroundRefresh }
 }

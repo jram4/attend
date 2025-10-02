@@ -1,7 +1,8 @@
+// app/admin/page.tsx
 import { cookies } from 'next/headers';
 import { adminLogin, adminLogout } from './actions';
 import { adminClient } from '@/lib/supabase/admin';
-import { AdminDashboardClient } from './dashboard-client';
+import { OverviewPage } from './components/overview-page';
 
 export const dynamic = 'force-dynamic';
 
@@ -63,7 +64,7 @@ export default async function AdminPage({ searchParams }: { searchParams: { erro
     );
   }
 
-  // --- fetch real data (same as your updated impl) ---
+  // Fetch all attendance data
   const { data, error } = await adminClient
     .from('attendance')
     .select('created_at, game_id, user_grade')
@@ -76,5 +77,5 @@ export default async function AdminPage({ searchParams }: { searchParams: { erro
 
   const rows = (data ?? []) as AttendanceRow[];
 
-  return <AdminDashboardClient rows={rows} adminLogout={adminLogout} />;
+  return <OverviewPage rows={rows} adminLogout={adminLogout} />;
 }
