@@ -4,7 +4,7 @@ export const GAMES = [
   {
     id: 'homecoming-2025',
     name: 'Demo Testing Game',
-    checkInStart: '2025-09-25T17:00:00Z',
+    checkInStart: '2025-08-21T17:00:00Z',
     checkInEnd: '2025-10-25T17:00:00Z',
     location: 'H',
     opponentLogoUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2d/StMarksTexas.jpg',
