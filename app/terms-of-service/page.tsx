@@ -28,14 +28,14 @@ export default function TermsOfServicePage() {
             Welcome to The Horde Attendance System ("we," "our," "the service"). These Terms of Service ("Terms") govern your use of our web application. By accessing or using the service, you agree to be bound by these Terms and our <Link href="/privacy-policy">Privacy Policy</Link>.
           </p>
           <p className="mb-4">
-            This service is a voluntary, student-led initiative created by students for students of <strong>[Your School Name]</strong> to promote school spirit. If you do not agree to these Terms, you may not use the service.
+            This service is a voluntary, student-led initiative created by students for students of <strong>The Episcopal School of Dallas</strong> to promote school spirit. If you do not agree to these Terms, you may not use the service.
           </p>
         </section>
 
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">2. Eligibility and Use</h2>
           <p className="mb-4">
-            This service is intended solely for current students of <strong>[Your School Name]</strong>. To use the service, you must:
+            This service is intended solely for current students of <strong>The Episcopal School of Dallas</strong>. To use the service, you must:
           </p>
           <ul className="list-disc pl-6 mb-4">
             <li>Be a currently enrolled student.</li>
@@ -113,7 +113,7 @@ export default function TermsOfServicePage() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">9. Governing Law</h2>
           <p className="mb-4">
-            These Terms shall be governed in accordance with the student conduct policies and administrative regulations of <strong>[Your School Name]</strong>. Any disputes related to the use of this service will be addressed by the student organizers in consultation with school faculty sponsors as needed.
+            These Terms shall be governed in accordance with the student conduct policies and administrative regulations of <strong>The Episcopal School of Dallas</strong>. Any disputes related to the use of this service will be addressed by the student organizers in consultation with school faculty sponsors as needed.
           </p>
         </section>
 

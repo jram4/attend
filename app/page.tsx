@@ -1,3 +1,5 @@
+// app/page.tsx
+
 import Link from 'next/link'
 import { ScreenshotDisplay } from './components/screenshot-display'
 
@@ -6,7 +8,7 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-white to-slate-100">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-slate-900 mb-6 tracking-tight">
             The Horde Attendance System
           </h1>
@@ -14,6 +16,22 @@ export default function Home() {
             Track student attendance at school games and fuel grade-level competition.
             A secure, mobile-first platform that makes checking in fast and fair.
           </p>
+
+          {/* --- NEW: Prominent Links for Google Verification --- */}
+          <div className="mt-8 flex justify-center gap-4">
+            <Link
+              href="/privacy-policy"
+              className="inline-flex items-center px-5 py-2.5 bg-white text-slate-700 font-semibold rounded-lg border border-slate-300 hover:bg-slate-50 transition-colors shadow-sm"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms-of-service"
+              className="inline-flex items-center px-5 py-2.5 bg-white text-slate-700 font-semibold rounded-lg border border-slate-300 hover:bg-slate-50 transition-colors shadow-sm"
+            >
+              Terms of Service
+            </Link>
+          </div>
         </div>
 
         {/* Main Features Grid */}
@@ -63,7 +81,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Screenshot placeholder */}
               <div className="bg-slate-50 rounded-lg p-4 border-2 border-dashed border-slate-200">
                 <ScreenshotDisplay
                   src="/checkin.png"
@@ -121,7 +138,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Screenshot placeholder */}
               <div className="bg-slate-50 rounded-lg p-4 border-2 border-dashed border-slate-200">
                 <ScreenshotDisplay
                   src="/admin.png"
@@ -189,6 +205,26 @@ export default function Home() {
           </div>
         </div>
       </div>
+      
+      {/* --- NEW: Footer Section for Google Verification --- */}
+      <footer className="bg-slate-100 border-t border-slate-200">
+        <div className="container mx-auto px-4 py-6 text-center text-sm text-slate-500">
+          <div className="flex justify-center gap-6 mb-2">
+            <Link href="/privacy-policy" className="hover:text-slate-800 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/terms-of-service" className="hover:text-slate-800 transition-colors">
+              Terms of Service
+            </Link>
+            <a href="mailto:joshuarobertramirez@gmail.com" className="hover:text-slate-800 transition-colors">
+              Contact Us
+            </a>
+          </div>
+          <p>
+            &copy; {new Date().getFullYear()} The Horde Attendance System. A student-led project at The Episcopal School of Dallas.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
