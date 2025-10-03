@@ -5,7 +5,6 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { GAMES } from '@/lib/game-config'
-// import { getUserLocation, isWithinRadius, type Coordinates } from '@/lib/location-utils' // Commented out as location check is disabled
 
 type Props = {
   game: typeof GAMES[number];
@@ -13,8 +12,6 @@ type Props = {
   checkInResult: any;
   showHeader?: boolean;
 }
-
-// --- Constants and Helpers ---
 
 const ESD_LOGO = 'https://bvmsports.com/wp-content/uploads/2021/12/20181010230955_782_mascotOrig-150x150.png'
 const TZ = 'America/Chicago' as const
@@ -116,8 +113,6 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
   const [componentState, setComponentState] = useState<ComponentState>({ status: 'idle' })
 
   async function handleCheckIn() {
-    // --- MODIFICATION START ---
-    // Location check has been disabled. The component now proceeds directly to OAuth.
     setComponentState({ status: 'loading', message: 'Redirecting to sign-in...' })
 
     try {
@@ -139,104 +134,36 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
             message: error.message || 'An unexpected error occurred during sign-in.'
         })
     }
-    // --- MODIFICATION END ---
-
-
-    /*
-    // --- ORIGINAL LOCATION CHECK LOGIC (COMMENTED OUT) ---
-    // Step 1: Request location
-    setComponentState({ status: 'checking-location', message: 'Getting your location...' })
-
-    try {
-      const userCoords = await getUserLocation()
-      
-      // Step 2: Verify location
-      const gameCoords = game.coordinates
-      const withinRange = isWithinRadius(userCoords, gameCoords, 1)
-      const distance = calculateDistance(userCoords, gameCoords)
-
-      if (!withinRange) {
-        setComponentState({
-          status: 'out-of-range',
-          message: `You must be within 1 mile of the venue to check in. You are ${distance.toFixed(2)} miles away.`,
-          distance,
-        })
-        return
-      }
-
-      // Step 3: Location verified, proceed to OAuth
-      setComponentState({ status: 'loading', message: 'Redirecting to sign-in...' })
-      
-      const supabase = createClient()
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=/${game.id}/checked-in`
-        }
-      })
-
-      if (error) {
-        setComponentState({ status: 'error', message: error.message })
-      }
-    } catch (err) {
-      const error = err as Error
-      setComponentState({
-        status: 'location-denied',
-        message: error.message || 'Unable to access your location'
-      })
-    }
-    */
   }
-
-  /*
-  // --- HELPER FUNCTIONS FOR LOCATION (COMMENTED OUT) ---
-  function calculateDistance(coord1: Coordinates, coord2: Coordinates): number {
-    const R = 3959
-    const dLat = toRad(coord2.lat - coord1.lat)
-    const dLng = toRad(coord2.lng - coord1.lng)
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRad(coord1.lat)) *
-        Math.cos(toRad(coord2.lat)) *
-        Math.sin(dLng / 2) *
-        Math.sin(dLng / 2)
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-    return R * c
-  }
-
-  function toRad(degrees: number): number {
-    return degrees * (Math.PI / 180)
-  }
-  */
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 flex flex-col">
       {showHeader && (
         <header className="mx-auto w-full max-w-md px-5 pt-8">
           <div className="flex flex-col items-center text-center">
             <div className="flex items-center gap-4 drop-shadow">
               <img src={ESD_LOGO} alt="ESD" className="h-16 w-16 object-contain" />
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-gray-500">VS</span>
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">VS</span>
               <img src={game.opponentLogoUrl} alt="Opponent Logo" className="h-16 w-16 object-contain" />
             </div>
-            <h1 className="mt-3 text-xl font-bold text-gray-900">{game.name}</h1>
+            <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-tight">{game.name}</h1>
             
             <div className="mt-2 flex items-center justify-center gap-x-3">
               {game.location === 'H' && (
-                <span className="bg-blue-100 text-blue-800 text-xs font-bold uppercase px-2 py-0.5 rounded-full">
+                <span className="bg-[#E6EAF2] text-[#00275D] text-xs font-bold uppercase px-2.5 py-1 rounded-full tracking-wide">
                   Home
                 </span>
               )}
               {game.location === 'A' && (
-                <span className="bg-slate-100 text-slate-800 text-xs font-bold uppercase px-2 py-0.5 rounded-full">
+                <span className="bg-slate-100 text-slate-700 text-xs font-bold uppercase px-2.5 py-1 rounded-full tracking-wide">
                   Away
                 </span>
               )}
             </div>
             
-            <p className="mt-1 text-sm text-gray-600">{formatFullWindow(new Date(game.checkInStart), new Date(game.checkInEnd))}</p>
-            <div className="mt-2"><StatusTimer game={game} /></div>
-            <p className="mt-1 text-[11px] text-gray-500">Check-in window: {formatCheckInWindow(new Date(game.checkInStart), new Date(game.checkInEnd))}</p>
+            <p className="mt-2 text-sm text-slate-600 font-medium">{formatFullWindow(new Date(game.checkInStart), new Date(game.checkInEnd))}</p>
+            <div className="mt-3"><StatusTimer game={game} /></div>
+            <p className="mt-1 text-[11px] text-slate-500">Check-in window: {formatCheckInWindow(new Date(game.checkInStart), new Date(game.checkInEnd))}</p>
           </div>
         </header>
       )}
@@ -245,11 +172,11 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
         {componentState.status === 'idle' && (
           <button
             onClick={handleCheckIn}
-            className="relative w-full max-w-md h-[64vh] rounded-[28px] bg-gradient-to-br from-blue-600 to-indigo-700 text-white drop-shadow-2xl shadow-[0_18px_40px_rgba(0,0,0,0.25)] ring-1 ring-white/10 border border-white/10 flex flex-col items-center justify-center gap-2 active:translate-y-[1px] active:shadow-[0_10px_24px_rgba(0,0,0,0.25)] focus:outline-none focus-visible:ring-4 focus-visible:ring-white/30 hover:scale-[1.01] transition-transform"
+            className="relative w-full max-w-md h-[64vh] rounded-[28px] bg-gradient-to-br from-[#00275D] to-[#001A3D] text-white drop-shadow-2xl shadow-[0_18px_40px_rgba(0,39,93,0.35)] ring-1 ring-white/10 border border-white/10 flex flex-col items-center justify-center gap-2 active:translate-y-[1px] active:shadow-[0_10px_24px_rgba(0,39,93,0.35)] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#00275D]/30 hover:scale-[1.01] transition-transform"
             aria-label="Check In with ESD"
           >
             <span className="pointer-events-none absolute inset-x-6 top-4 h-10 rounded-2xl bg-white/15 blur-md" />
-            <span className="text-[13px] font-semibold uppercase tracking-wide text-white/85">Check In</span>
+            <span className="text-[13px] font-semibold uppercase tracking-wider text-white/90">Check In</span>
             <span className="text-5xl font-extrabold tracking-tight">With ESD</span>
             <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="opacity-90"><path d="M13.172 12 8.222 7.05l1.414-1.414L16 12l-6.364 6.364-1.414-1.414z"/></svg>
@@ -259,13 +186,11 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
         )}
 
         {componentState.status === 'loading' && (
-          <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-gray-200 bg-white/90 shadow-xl backdrop-blur flex flex-col items-center justify-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mb-6" />
-            <p className="text-lg font-semibold text-gray-700">{componentState.message}</p>
+          <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-slate-200 bg-white/90 shadow-xl backdrop-blur flex flex-col items-center justify-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#E6EAF2] border-t-[#00275D] mb-6" />
+            <p className="text-lg font-semibold text-slate-700">{componentState.message}</p>
           </div>
         )}
-        
-        {/* The location-denied and out-of-range states are no longer reachable */}
 
         {componentState.status === 'error' && (
           <div className="w-full max-w-md h-[60vh] rounded-[28px] border border-red-200 bg-red-50/90 shadow-xl backdrop-blur flex flex-col items-center justify-center text-red-800 p-6">
@@ -273,7 +198,7 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
             <h2 className="text-2xl font-bold mb-2">{componentState.message || 'Something went wrong'}</h2>
             <button
               onClick={() => setComponentState({ status: 'idle' })}
-              className="rounded-xl bg-gray-900 text-white px-5 py-3 text-sm font-semibold shadow-md active:scale-[.99]"
+              className="rounded-xl bg-slate-900 text-white px-5 py-3 text-sm font-semibold shadow-md active:scale-[.99]"
             >
               Try Again
             </button>
@@ -281,7 +206,7 @@ export default function CheckInClient({ game, session, checkInResult, showHeader
         )}
       </main>
 
-      <footer className="mx-auto max-w-md pb-8 text-center text-xs text-gray-500">
+      <footer className="mx-auto max-w-md pb-8 text-center text-xs text-slate-500">
         Secure sign-in with your school account.
       </footer>
     </div>

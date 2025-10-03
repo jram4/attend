@@ -3,6 +3,23 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* ESD Brand Colors - Pantone 288C */
+  --esd-blue: #00275D;
+  --esd-blue-light: #003B7E;
+  --esd-blue-dark: #001A3D;
+  
+  /* Accent variations for UI */
+  --esd-blue-50: #E6EAF2;
+  --esd-blue-100: #CCD5E5;
+  --esd-blue-200: #99ABCB;
+  --esd-blue-300: #6681B1;
+  --esd-blue-400: #335797;
+  --esd-blue-500: #00275D; /* Primary */
+  --esd-blue-600: #001F4A;
+  --esd-blue-700: #001737;
+  --esd-blue-800: #001025;
+  --esd-blue-900: #000812;
 }
 
 @theme inline {
@@ -10,6 +27,21 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Add ESD colors to Tailwind */
+  --color-esd-blue: var(--esd-blue);
+  --color-esd-blue-light: var(--esd-blue-light);
+  --color-esd-blue-dark: var(--esd-blue-dark);
+  --color-esd-blue-50: var(--esd-blue-50);
+  --color-esd-blue-100: var(--esd-blue-100);
+  --color-esd-blue-200: var(--esd-blue-200);
+  --color-esd-blue-300: var(--esd-blue-300);
+  --color-esd-blue-400: var(--esd-blue-400);
+  --color-esd-blue-500: var(--esd-blue-500);
+  --color-esd-blue-600: var(--esd-blue-600);
+  --color-esd-blue-700: var(--esd-blue-700);
+  --color-esd-blue-800: var(--esd-blue-800);
+  --color-esd-blue-900: var(--esd-blue-900);
 }
 
 @media (prefers-color-scheme: dark) {
