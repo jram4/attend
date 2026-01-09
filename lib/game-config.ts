@@ -49,8 +49,8 @@ export const GAMES = [
   {
     id: 'oct-3-at-episcopal-high',
     name: 'at Episcopal High School',
-    checkInStart: '2025-10-03T23:00:00Z',
-    checkInEnd: '2025-10-04T02:30:00Z',
+    checkInStart: '2026-1-07T23:00:00Z',
+    checkInEnd: '2026-1-08T02:30:00Z',
     location: 'A',
     opponentLogoUrl: 'https://www.txhslogoproject.com/wp-content/uploads/2019/02/Houston-Episcopal-Knights.png',
     coordinates: { lat: 29.715596376018453, lng: -95.45635002119532 },
