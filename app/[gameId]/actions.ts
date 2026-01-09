@@ -36,9 +36,13 @@ export async function checkInUser(gameId: string) {
 
   if (now < checkInStart || now > checkInEnd) {
     console.warn(`Check-in attempt outside of window for user ${user.email}.`);
+    const message = now < checkInStart
+      ? "It's not time to check in yet."
+      : "The check-in window for this game has closed."
+
     return {
       status: 'error',
-      message: 'The check-in window for this game is not currently open.'
+      message
     } as const
   }
 
